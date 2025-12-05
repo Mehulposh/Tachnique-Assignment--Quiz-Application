@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import quizRoutes from './routes/QuizRoutes.js';
 
-dotenv.congig()
+dotenv.config()
 
 const app = express();
 

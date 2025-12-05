@@ -15,3 +15,5 @@ const AttemptSchema = new mongoose.Schema({
     timeTaken: { type: Number, default: 0 } // in seconds
 }, { timestamps: true  }
 )
+
+export default mongoose.model('Attempt', AttemptSchema);

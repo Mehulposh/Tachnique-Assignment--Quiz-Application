@@ -49,4 +49,4 @@ const QuizSchema = new mongooese.Schema({
 }, { timestamps: true  }
 );
 
-export const QuizModel = mongooese.model('Quiz', QuizSchema)
+export default mongooese.model('Quiz', QuizSchema)

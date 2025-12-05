@@ -1,19 +1,19 @@
 import express from 'express';
 import { Router } from 'express';   
 
-import quizController from '../controllers/quizController.js';
+import {getAllQuizzes,getQuizById,getQuizWithAnswer,createQuiz,submitQuizAttempt} from '../controllers/quizControllers.js';
+
 const router = Router();
 
+// Public Routes
+router.get('/',getAllQuizzes);
+router.get('/:quizId', getQuizById);
+router.post('/submit/', submitQuizAttempt);
 
-//Public Routes
-router.get('/', quizController.getAllQuizzes);
-router.get('/:quizId', quizController.getQuizById);
-router.post('/submit/', quizController.submitQuiz);
+// Admin Routes
+router.get('/:id/admin', getQuizWithAnswer);
+router.post('/admin/create', createQuiz);
+
+export default router;
 
 
-//Admin Routes
-router.get('/:id/admin', quizController.getQuizWithAnswer);
-router.post('/admin/create', quizController.createQuiz);
-
-
-module.exports = router;
