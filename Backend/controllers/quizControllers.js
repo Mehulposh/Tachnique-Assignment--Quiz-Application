@@ -110,6 +110,13 @@ export const submitQuizAttempt = async (req, res) => {
   try {
     const { quizId, userName, answers, timeTaken } = req.body;
 
+    if (!quizId || !answers || typeof answers !== "object") {
+      return res.status(400).json({
+        success: false,
+        message: "quizId and answers are required",
+      });
+    }
+
     const quiz = await QuizModel.findById(quizId);
 
     if (!quiz) {
@@ -121,47 +128,49 @@ export const submitQuizAttempt = async (req, res) => {
 
     let correctCount = 0;
 
-    // Assuming `answers` is an object like { [questionId]: "userAnswer" }
+    // answers: { [questionId]: "userAnswer" }, questionId is question._id
     quiz.questions.forEach((question) => {
-      const questionId = question._id?.toString() || question.id;
-      const rawUserAnswer = answers?.[questionId];
+      const qid = question._id.toString();
+      const userAnswer = answers[qid];
+      if (!userAnswer || !question.correctAnswer) return; // skip if missing
 
-      if (!rawUserAnswer) return;
+      const ua = String(userAnswer).trim().toLowerCase();
+      const ca = String(question.correctAnswer).trim().toLowerCase();
 
-      const userAnswer = String(rawUserAnswer).trim().toLowerCase();
-      const correctAnswer = String(question.correctAnswer).trim().toLowerCase();
-
-      if (userAnswer === correctAnswer) {
-        correctCount += 1;
+      if (ua === ca) {
+        correctCount++;
       }
     });
 
     const totalQuestions = quiz.questions.length;
-    const percentage = Math.round((correctCount / totalQuestions) * 100);
+    const percentage =
+      totalQuestions === 0
+        ? 0
+        : Math.round((correctCount / totalQuestions) * 100);
 
-    const attempt = new AttemptSchema({
+    const attempt = await AttemptSchema.create({
       quizId,
       quizTitle: quiz.title,
       userName: userName || "Guest",
-      answers: answers,
+      answers,
+      score: correctCount,
       totalQuestions,
       percentage,
       timeTaken: timeTaken || 0,
-      score: correctCount,
     });
 
-    await attempt.save();
-
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Quiz attempt submitted successfully",
       data: {
         score: correctCount,
         totalQuestions,
         percentage,
+        attemptId: attempt._id,
       },
     });
   } catch (error) {
+    console.error("submitQuizAttempt error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to submit quiz attempt",
@@ -169,5 +178,6 @@ export const submitQuizAttempt = async (req, res) => {
     });
   }
 };
+
 
 

@@ -14,8 +14,13 @@ const QuizApp = () => {
   useEffect(() => {
     const loadQuizzes = async () => {
     try {
-      const data = await apiService.getQuizzes();
-      setQuizzes(data);
+      const data = await apiService.getQuizzes() ;
+
+      if(data){
+        setQuizzes(data.data);
+      }else{
+        setQuizzes([]);
+      }
     } catch (err) {
       console.error('Failed to load quizzes',err);
     }
@@ -46,7 +51,7 @@ const QuizApp = () => {
         <HomePage 
           quizzes={quizzes}
           onNavigate={setView}
-          onStartQuiz={handleStartQuiz}
+          OnStart={handleStartQuiz}
         />
       )}
       

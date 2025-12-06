@@ -8,7 +8,7 @@ const router = Router();
 // Public Routes
 router.get('/',getAllQuizzes);
 router.get('/:quizId', getQuizById);
-router.post('/submit/', submitQuizAttempt);
+router.post('/submit', submitQuizAttempt);
 
 // Admin Routes
 router.get('/:id/admin', getQuizWithAnswer);

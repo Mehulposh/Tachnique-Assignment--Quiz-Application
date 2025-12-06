@@ -18,6 +18,9 @@ const PORT = process.env.PORT || 5000;
 
 //mongoose connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/quizdb';
+mongoose.connect(MONGO_URI)
+.then(() => console.log('MongoDB connected'))
+.catch((err) => console.error('MongoDB connection error:', err));   
 
 //routes 
 app.use('/api/quizzes', quizRoutes);

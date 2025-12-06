@@ -5,7 +5,7 @@ const QuestionSchema = new mongooese.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['MCQ', 'TrueFalse']
+        enum: ['MCQ', 'TrueFalse', 'Text']
     },
     question: { type: String, required: true },
     options: { 

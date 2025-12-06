@@ -9,25 +9,32 @@ export const AdminPage = ({ onNavigate, onQuizSaved }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSaveQuiz = async () => {
-    if (!editingQuiz.title || editingQuiz.questions.length === 0) {
-      setError('Please add a title and at least one question');
+ const handleSaveQuiz = async () => {
+  if (!editingQuiz.title || editingQuiz.questions.length === 0) {
+    setError('Please add a title and at least one question');
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const savedQuizResponse = await apiService.createQuiz(editingQuiz);
+
+    if (!savedQuizResponse.success) {
+      setError(savedQuizResponse.message || 'Failed to save quiz');
       return;
     }
 
-    setLoading(true);
-    try {
-      const savedQuiz = await apiService.saveQuiz(editingQuiz);
-      onQuizSaved(savedQuiz);
-      setEditingQuiz({ title: '', questions: [] });
-      setError('');
-      alert('Quiz saved successfully!');
-    } catch (err) {
-      setError('Failed to save quiz');
-    } finally {
-      setLoading(false);
-    }
-  };
+    onQuizSaved(savedQuizResponse.data);
+    setEditingQuiz({ title: '', questions: [] });
+    setError('');
+    alert('Quiz saved successfully!');
+  } catch (err) {
+    console.error(err);
+    setError('Failed to save quiz');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

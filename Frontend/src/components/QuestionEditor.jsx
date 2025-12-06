@@ -34,7 +34,7 @@ export const QuestionEditor = ({ question, index, onUpdate, onDelete }) => {
         className="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4"
       />
 
-      {question.type === 'mcq' && (
+      {question.type === 'MCQ' && (
         <>
           <div className="space-y-2 mb-4">
             {question.options.map((opt, optIndex) => (
@@ -61,7 +61,7 @@ export const QuestionEditor = ({ question, index, onUpdate, onDelete }) => {
         </>
       )}
 
-      {question.type === 'truefalse' && (
+      {question.type === 'TrueFalse' && (
         <select
           value={question.correctAnswer}
           onChange={(e) => updateField('correctAnswer', e.target.value)}
@@ -73,7 +73,7 @@ export const QuestionEditor = ({ question, index, onUpdate, onDelete }) => {
         </select>
       )}
 
-      {question.type === 'text' && (
+      {question.type === 'Text' && (
         <input
           type="text"
           value={question.correctAnswer}

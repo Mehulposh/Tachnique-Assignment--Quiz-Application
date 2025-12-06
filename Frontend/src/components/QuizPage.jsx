@@ -1,30 +1,45 @@
 import React, { useState } from 'react';
 import { QuestionDisplay } from './QquestionDisplay.jsx';
+import apiServices from './ApiServices.js';
 
 
 export const QuizPage = ({ quiz, onNavigate, onSubmit }) => {
   const [answers, setAnswers] = useState({});
 
   const handleAnswerChange = (questionId, value) => {
-    setAnswers({ ...answers, [questionId]: value });
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));   
   };
 
-  const handleSubmit = () => {
-    let correct = 0;
-    quiz.questions.forEach((q) => {
-      const userAnswer = answers[q.id];
-      if (q.type === 'text') {
-        if (userAnswer?.toLowerCase().trim() === q.correctAnswer.toLowerCase().trim()) {
-          correct++;
-        }
-      } else {
-        if (userAnswer === q.correctAnswer) {
-          correct++;
-        }
-      }
+ const handleSubmit = async () => {
+  try {
+    // optional: basic validation
+    if (Object.keys(answers).length === 0) return;
+
+    const payload = {
+      quizId: quiz._id,
+      userName:  'Guest',   // you can manage this from parent/auth
+      answers,                         // { [questionId]: value }
+      timeTaken:  0,       // if you track timer
+    };
+
+    const res = await apiServices.submitQuizAttempt(payload);
+
+    if (!res.success) {
+      // optional: show error
+      console.error(res.message);
+      return;
+    }
+
+    // backend returns: { score, totalQuestions, percentage }
+    onSubmit({
+      correct: res.data.score,
+      total: res.data.totalQuestions,
+      percentage: res.data.percentage,
     });
-    onSubmit({ correct, total: quiz.questions.length });
-  };
+  } catch (err) {
+    console.error('Failed to submit quiz:', err);
+  }
+};
 
   return (
     <div className="min-h-screen bg-linear-to-br from-indigo-50 to-purple-100 p-8">
@@ -36,10 +51,10 @@ export const QuizPage = ({ quiz, onNavigate, onSubmit }) => {
           <div className="space-y-8">
             {quiz.questions.map((q, index) => (
               <QuestionDisplay
-                key={q.id}
+                key={q._id}
                 question={q}
                 index={index}
-                answer={answers[q.id]}
+                answer={answers[q._id]}
                 onAnswerChange={handleAnswerChange}
               />
             ))}
