@@ -2,7 +2,7 @@ export const ResultsPage = ({ score, onNavigate }) => {
   const percentage = Math.round((score.correct / score.total) * 100);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100 p-8 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-green-50 to-blue-100 p-8 flex items-center justify-center">
       <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-12 text-center">
         <div className="mb-8">
           <div className="text-6xl font-bold text-indigo-600 mb-4">

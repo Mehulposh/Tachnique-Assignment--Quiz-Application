@@ -4,7 +4,7 @@ import QuizList from '../components/QuizList.jsx'
 
 const HomePage = ({quizzes,onNavigate, OnStart, }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-5xl font-bold text-center mb-4 text-indigo-900">Quiz Master</h1>
         <p className="text-center text-gray-600 mb-12">Test your knowledge or create amazing quizzes</p>

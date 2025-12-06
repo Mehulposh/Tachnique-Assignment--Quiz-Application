@@ -20,14 +20,14 @@ export  const AIQuizGenerator = ({ onQuizGenerated, error, setError }) => {
       onQuizGenerated(quizData);
       setPrompt('');
     } catch (err) {
-      setError('Failed to generate quiz: ' + err.message);
+      setError('Failed to generate quiz' );
     } finally {
       setGenerating(false);
     }
   };
 
   return (
-    <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl p-8 mb-8 text-white">
+    <div className="bg-linear-to-r from-purple-500 to-indigo-600 rounded-2xl p-8 mb-8 text-white">
       <div className="flex items-center mb-4">
         <Sparkles className="w-6 h-6 mr-2" />
         <h2 className="text-2xl font-bold">AI Quiz Generator</h2>
