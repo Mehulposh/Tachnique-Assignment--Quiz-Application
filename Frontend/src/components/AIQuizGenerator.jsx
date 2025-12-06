@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import apiService from './ApiServices.js';
 
+
 export  const AIQuizGenerator = ({ onQuizGenerated, error, setError }) => {
   const [prompt, setPrompt] = useState('');
   const [generating, setGenerating] = useState(false);
@@ -14,17 +15,44 @@ export  const AIQuizGenerator = ({ onQuizGenerated, error, setError }) => {
 
     setGenerating(true);
     setError('');
-
     try {
-      const quizData = await apiService.generateQuizWithAI(prompt);
-      onQuizGenerated(quizData);
-      setPrompt('');
+      const aiQuiz = await apiService.generateQuizWithAI(prompt);
+
+      // ✅ Normalize AI quiz shape for the rest of the app / backend
+      const normalizedQuiz = {
+        title: aiQuiz.title || `${prompt} Quiz`,
+        questions: (aiQuiz.questions || []).map((q, index) => {
+          const type = q.type || ''; 
+
+          // Ensure options always exists
+          let options = q.options;
+          if (!options) {
+            if (type === 'truefalse') {
+              options = ['true', 'false'];
+            } else {
+              options = []; // for text or anything else
+            }
+          }
+
+          return {
+            id: q.id || `q${index + 1}`,
+            type, // normalized lowercase type
+            question: q.question || '',
+            options,
+            correctAnswer: String(q.correctAnswer ?? '').trim(),
+          };
+        }),
+      };
+
+      onQuizGenerated(normalizedQuiz); // fills { title, questions } into AdminPage
     } catch (err) {
-      setError('Failed to generate quiz' );
+      console.error('AI generate error:', err);
+      setError(err.message || 'Failed to generate quiz');
     } finally {
       setGenerating(false);
     }
   };
+
 
   return (
     <div className="bg-linear-to-r from-purple-500 to-indigo-600 rounded-2xl p-8 mb-8 text-white">

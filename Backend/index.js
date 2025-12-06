@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import quizRoutes from './routes/QuizRoutes.js';
+import AiRoute from './routes/AiRoute.js';
 
 dotenv.config()
 
@@ -24,6 +25,7 @@ mongoose.connect(MONGO_URI)
 
 //routes 
 app.use('/api/quizzes', quizRoutes);
+app.use('/api/ai', AiRoute);
 
 //health check route
 app.get('/api/health', (req, res) => {

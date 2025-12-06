@@ -13,11 +13,17 @@ const QuestionSchema = new mongooese.Schema({
         default: undefined,
         validate:{ 
             validator: function(value) {
-            return this.type === 'MCQ' || (Array.isArray(value) && value.length >= 2);
+                // For non-MCQ, don't validate options at all
+                if (this.type !== 'MCQ') return true;
+
+                // For MCQ, require at least 2 options
+                return Array.isArray(value) && value.length >= 2;
             }, 
             message: 'Options are required for MCQ type questions and should have at least two options.'
         },
-        required: true 
+        required: function () {
+            return this.type === 'MCQ';
+        }, 
     },
     correctAnswer: { type: String, required: true }
     

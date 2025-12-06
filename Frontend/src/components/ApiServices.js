@@ -48,7 +48,20 @@ const apiServices = {
         return handleResponse(response);
     },
 
+    generateQuizWithAI: async (prompt) => {
+        const response = await fetch(`${Base_Url}/ai/generate-quiz`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+        });
 
+        const resData = await handleResponse(response);
+        // backend sends { success, data: quizJson }
+        if (!resData.success) {
+            throw new Error(resData.message || "Failed to generate quiz");
+        }
+        return resData.data; // { title, questions: [...] }
+  },
 };
 
 export default apiServices;
