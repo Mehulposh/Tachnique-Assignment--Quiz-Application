@@ -1,4 +1,4 @@
-const Base_Url = 'http://localhost:5000/api';
+const Base_Url = 'https://tachnique-assignment-quiz-application.onrender.com/api';
 
 const handleResponse = async (response) => {
   const data = await response.json().catch(() => null);
