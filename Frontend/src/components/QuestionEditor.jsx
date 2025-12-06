@@ -1,3 +1,6 @@
+import React from 'react';
+import { Trash2 } from 'lucide-react';
+
 export const QuestionEditor = ({ question, index, onUpdate, onDelete }) => {
   const updateField = (field, value) => {
     onUpdate(index, field, value);

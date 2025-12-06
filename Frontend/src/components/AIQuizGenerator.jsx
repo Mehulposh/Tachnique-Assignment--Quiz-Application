@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sparkles } from 'lucide-react';
-import apiService from '../services/apiService.jsx';
+import apiService from './ApiServices.js';
 
 export  const AIQuizGenerator = ({ onQuizGenerated, error, setError }) => {
   const [prompt, setPrompt] = useState('');

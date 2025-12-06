@@ -1,3 +1,7 @@
+import React from 'react';
+import { Plus, Save } from 'lucide-react';
+import { QuestionEditor } from './QuestionEditor.jsx';
+
 export const QuizEditor = ({ quiz, onQuizChange, onSave, loading }) => {
   const addQuestion = (type) => {
     const newQuestion = {

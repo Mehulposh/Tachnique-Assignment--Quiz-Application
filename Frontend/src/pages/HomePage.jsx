@@ -1,5 +1,5 @@
 import React from 'react'
-import { ClipboardList, User } from 'lucide-react'
+import { ClipboardList, Users } from 'lucide-react'
 import QuizList from '../components/QuizList.jsx'
 
 const HomePage = ({quizzes,onNavigate, OnStart, }) => {

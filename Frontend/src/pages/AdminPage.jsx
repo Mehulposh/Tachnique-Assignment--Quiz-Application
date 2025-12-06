@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { QuizEditor } from '../components/QuizEditor.jsx';
 import { AIQuizGenerator } from '../components/AIQuizGenerator.jsx';
-import { ErrorAlert } from '../components/ErrorAlert.jsx';
-import apiService from '../services/apiService.jsx';
+import ErrorHandler from '../components/ErrorHandler.jsx';
+import apiService from '../components/ApiServices.js';
 
 export const AdminPage = ({ onNavigate, onQuizSaved }) => {
   const [editingQuiz, setEditingQuiz] = useState({ title: '', questions: [] });
@@ -42,7 +42,7 @@ export const AdminPage = ({ onNavigate, onQuizSaved }) => {
           </button>
         </div>
 
-        <ErrorAlert message={error} />
+        <ErrorHandler message={error} />
 
         <AIQuizGenerator 
           onQuizGenerated={setEditingQuiz}

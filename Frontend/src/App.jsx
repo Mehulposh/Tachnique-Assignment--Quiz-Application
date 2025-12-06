@@ -1,35 +1,78 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import  HomePage  from './pages/HomePage.jsx';
+import { AdminPage } from './pages/AdminPage.jsx';
+import { QuizPage } from './components/QuizPage.jsx';
+import { ResultsPage } from './components/ResultPage.jsx';
+import apiService from './components/ApiServices.js';
 
-function App() {
-  const [count, setCount] = useState(0)
+const QuizApp = () => {
+  const [view, setView] = useState('home');
+  const [quizzes, setQuizzes] = useState([]);
+  const [currentQuiz, setCurrentQuiz] = useState(null);
+  const [score, setScore] = useState(null);
+
+  useEffect(() => {
+    const loadQuizzes = async () => {
+    try {
+      const data = await apiService.getQuizzes();
+      setQuizzes(data);
+    } catch (err) {
+      console.error('Failed to load quizzes',err);
+    }
+  };
+  loadQuizzes();
+  }, []);
+
+  
+
+  const handleStartQuiz = (quiz) => {
+    setCurrentQuiz(quiz);
+    setScore(null);
+    setView('quiz');
+  };
+
+  const handleQuizSubmit = (scoreData) => {
+    setScore(scoreData);
+    setView('results');
+  };
+
+  const handleQuizSaved = (newQuiz) => {
+    setQuizzes([...quizzes, newQuiz]);
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {view === 'home' && (
+        <HomePage 
+          quizzes={quizzes}
+          onNavigate={setView}
+          onStartQuiz={handleStartQuiz}
+        />
+      )}
+      
+      {view === 'admin' && (
+        <AdminPage 
+          onNavigate={setView}
+          onQuizSaved={handleQuizSaved}
+        />
+      )}
+      
+      {view === 'quiz' && currentQuiz && (
+        <QuizPage 
+          quiz={currentQuiz}
+          onNavigate={setView}
+          onSubmit={handleQuizSubmit}
+        />
+      )}
+      
+      {view === 'results' && score && (
+        <ResultsPage 
+          score={score}
+          onNavigate={setView}
+        />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default App
+export default QuizApp;

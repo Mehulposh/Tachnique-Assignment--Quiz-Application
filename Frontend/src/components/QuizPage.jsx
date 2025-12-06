@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { QuestionDisplay } from './QuestionDisplay.jsx';
+import { QuestionDisplay } from './QquestionDisplay.jsx';
 
 
 export const QuizPage = ({ quiz, onNavigate, onSubmit }) => {

@@ -35,5 +35,4 @@ const apiServices = {
         return response.json();
     },};
 
-export { apiServices
-}
+export default apiServices;
